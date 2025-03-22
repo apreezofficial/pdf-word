@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF to Word Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@7.1.2/build/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PDF to Word Converter</h1>
+        <p>Convert your PDF files to Word documents easily.</p>
+        <div class="upload-box" id="uploadBox">
+            <input type="file" id="fileInput" accept=".pdf" hidden />
+            <label for="fileInput" class="upload-label">
+                <span class="drag-text">Drag & Drop or Click to Upload</span>
+                <span class="file-name" id="fileName"></span>
+            </label>
+        </div>
+        <button id="convertBtn" class="btn" disabled>Convert to Word</button>
+        <div class="status" id="status"></div>
+        <a id="downloadLink" class="download-link" style="display: none;">Download Word File</a>
+    </div>
+
+    <!-- Script JS -->
+    <script src="./script.js"></script>
+</body>
+</html>

@@ -1,139 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AP PDF to Word Converter</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docx@7.1.2/build/index.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF → Word Converter</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@7.1.2/build/index.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://unpkg.com/lucide-icons/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-tr from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 flex items-center justify-center transition-colors">  <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md p-10 text-center space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <i data-lucide="file-text" class="w-6 h-6"></i>
+        PDF → Word
+      </h1>
+      <button id="themeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700">
+        <i data-lucide="moon" class="w-5 h-5 text-gray-800 dark:text-gray-100"></i>
+      </button>
+    </div><!-- Description -->
+<p class="text-gray-600 dark:text-gray-300">Convert your PDF files into Word documents quickly.</p>
 
-    <!-- Style CSS -->
-<style>
-    /* General Styles */
-body {
-    font-family: "Arial", sans-serif;
-    background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%);
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
+<!-- Upload Box -->
+<label for="fileInput" id="uploadBox" class="flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl p-10 cursor-pointer hover:border-blue-500 transition">
+  <input type="file" id="fileInput" accept=".pdf" hidden />
+  <i data-lucide="upload" class="w-10 h-10 text-gray-400"></i>
+  <span class="text-gray-500 dark:text-gray-300">Drag & Drop or Click to Upload</span>
+  <span id="fileName" class="text-blue-600 font-semibold"></span>
+</label>
 
-.container {
-    text-align: center;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    width: 100%;
-}
+<!-- Convert Button -->
+<button id="convertBtn" disabled class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:bg-gray-400 transition">
+  <i data-lucide="file-output" class="w-5 h-5"></i>
+  Convert to Word
+</button>
 
-h1 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
+<!-- Status & Download -->
+<div id="status" class="text-sm text-gray-500 dark:text-gray-400"></div>
+<a id="downloadLink" class="hidden text-blue-600 hover:underline font-semibold" download>Download Word File</a>
 
-p {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 2rem;
-}
-
-/* Upload Box */
-.upload-box {
-    border: 2px dashed #ccc;
-    padding: 2rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
-}
-
-.upload-box:hover {
-    border-color: #007bff;
-}
-
-.upload-label {
-    display: block;
-    cursor: pointer;
-}
-
-.drag-text {
-    font-size: 1rem;
-    color: #666;
-}
-
-.file-name {
-    font-size: 0.9rem;
-    color: #007bff;
-    margin-top: 0.5rem;
-    display: block;
-}
-
-/* Button */
-.btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-.btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-/* Status Message */
-.status {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-/* Download Link */
-.download-link {
-    display: inline-block;
-    margin-top: 1rem;
-    color: #007bff;
-    text-decoration: none;
-    font-size: 1rem;
-}
-
-.download-link:hover {
-    text-decoration: underline;
-}
-</style></head>
-<body>
-    <div class="container">
-            <marquee style="color:black">Made with love 💕💕💕 from<a href="https://a
-preciousadedokun.com.ng">Apcodesphere</a></marquee>
-  <h1>PDF ~ Word</h1>
-        <p>Convert your PDF files to Word documents easily.</p>
-        <div class="upload-box" id="uploadBox">
-            <input type="file" id="fileInput" accept=".pdf" hidden />
-            <label for="fileInput" class="upload-label">
-                <span class="drag-text">Drag & Drop or Click to Upload</span>
-                <span class="file-name" id="fileName"></span>
-            </label>
-        </div>
-        <button id="convertBtn" class="btn" disabled>Convert to Word</button>
-        <div class="status" id="status"></div>
-        <a id="downloadLink" class="download-link" style="display: none;">Download Word File</a>
-    </div>
-
-    <!-- Script JS -->
-    <script src="./script.ts"></script>
-</body>
+  </div><script>
+  lucide.createIcons();
+  const themeToggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  themeToggle.addEventListener('click', () => {
+    html.classList.toggle('dark');
+    themeToggle.innerHTML = html.classList.contains('dark') ? '<i data-lucide="sun" class="w-5 h-5 text-gray-100"></i>' : '<i data-lucide="moon" class="w-5 h-5 text-gray-800"></i>';
+    lucide.createIcons();
+  });
+</script><script src="./script.ts"></script></body>
 </html>
